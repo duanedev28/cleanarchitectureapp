@@ -417,5 +417,38 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
-# appsettings and keys
-appsettings*.json
+
+# Build directories
+bin/
+obj/
+out/
+publish/
+
+# Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider / JetBrains
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# App settings (local / secrets)
+**/appsettings.json
+**/appsettings.*.json
+
+# Keep templates
+!**/appsettings.json.example
