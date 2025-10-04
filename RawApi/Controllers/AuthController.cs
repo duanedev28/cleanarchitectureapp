@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RawApi.Application;
 using RawApi.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace RawApi.Controllers
 {

@@ -13,19 +13,16 @@ namespace RawApi.Infra
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IConfiguration configuration)
         {
+            //Sql connection
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("Default")));
 
             //Repository
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             //Services
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IJwtService, JwtService>();
-            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-            services.AddScoped<IAuthService, AuthService>();
-
+            services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
             return services;
         }
     }

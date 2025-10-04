@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using RawApi.Infra.Exceptions;
 
 namespace RawApi
 {
@@ -31,7 +32,7 @@ namespace RawApi
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter 'Bearer' [space] and then your valid JWT token."
+                    Description = "Enter your Jwt access token"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -80,6 +81,7 @@ namespace RawApi
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseMiddleware<GlobalExceptionHandler>();
 
             app.MapControllers();
 
