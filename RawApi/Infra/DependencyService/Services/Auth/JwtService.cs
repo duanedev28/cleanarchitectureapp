@@ -1,6 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 using RawApi.Application.Interfaces;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
@@ -12,30 +12,27 @@ namespace RawApi.Infra
 
         public string GenerateToken(int userId, string username, string role)
         {
-            var jwtSettings = _configuration.GetSection("Jwt") 
-                ?? throw new NullReferenceException("Jwt should not be empty.");
-            var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!));
+            var credentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()), 
+                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, username),
-                new Claim(ClaimTypes.Role, role),                 
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) 
+                new Claim(ClaimTypes.Role,role),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var token = new JwtSecurityToken(
-                issuer: jwtSettings["Issuer"],
-                audience: jwtSettings["Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(15),           
-                signingCredentials: new SigningCredentials(
-                    new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256
-                )
-             );
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("Jwt:ExpirationInMinutes")),
+                SigningCredentials = credentials,
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"]
+            };
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new JsonWebTokenHandler().CreateToken(tokenDescriptor);
         }
     }
 }

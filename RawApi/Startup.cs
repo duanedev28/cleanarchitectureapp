@@ -55,24 +55,22 @@ namespace RawApi
                 });
             });
 
-            // Add Jwt Authentication
-            var jwt = builder.Configuration.GetSection("Jwt");
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = jwt["Issuer"],
-                        ValidAudience = jwt["Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!))
-                    };
-                });
+            builder.Services
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters.ValidIssuer = builder.Configuration["Jwt:Issuer"];
+                options.TokenValidationParameters.ValidAudience = builder.Configuration["Jwt:Audience"];
+                options.TokenValidationParameters.IssuerSigningKey =
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!));
+            });
 
             builder.Services.AddAuthorization();
+
             var app = builder.Build();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -82,7 +80,9 @@ namespace RawApi
             }
 
             app.UseHttpsRedirection();
+
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseMiddleware<GlobalExceptionHandler>();
