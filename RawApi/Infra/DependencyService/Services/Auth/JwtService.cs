@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace RawApi.Infra.DependencyService.Services.Auth
+namespace RawApi.Infra
 {
     public class JwtService(IConfiguration configuration) : IJwtService
     {

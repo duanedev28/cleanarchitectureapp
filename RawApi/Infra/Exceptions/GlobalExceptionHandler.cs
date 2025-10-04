@@ -18,6 +18,7 @@ namespace RawApi.Infra.Exceptions
                 context.Response.StatusCode = ex switch
                 {
                     ApplicationException => StatusCodes.Status400BadRequest,
+                    UnauthorizedAccessException => StatusCodes.Status404NotFound,
                     _ => StatusCodes.Status500InternalServerError
                 };
 

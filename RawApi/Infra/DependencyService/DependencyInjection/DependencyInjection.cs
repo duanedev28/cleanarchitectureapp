@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using RawApi.Application;
-using RawApi.Application.Interfaces;
 using RawApi.Domain;
 using RawApi.Domain.Entities;
-using RawApi.Infra.DependencyService.Services.Auth;
+
 
 namespace RawApi.Infra
 {

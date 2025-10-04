@@ -20,12 +20,8 @@ namespace RawApi.Application
                 throw new NullReferenceException("username and password should not be empty");
             };
 
-            var user = await _userRepository.GetUserByUsernameAsync(username);
-
-            if (user is null)
-            {
-                throw new InvalidOperationException("User not found");
-            }
+            var user = await _userRepository.GetUserByUsernameAsync(username) ?? 
+                throw new UnauthorizedAccessException("User not found");
 
             var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, password);
 

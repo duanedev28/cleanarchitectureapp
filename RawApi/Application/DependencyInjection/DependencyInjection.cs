@@ -2,14 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using RawApi.Application.Interfaces;
 using RawApi.Domain.Entities;
-using RawApi.Infra.DependencyService.Services.Auth;
 using RawApi.Infra;
 
 namespace RawApi.Application
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services,
+        public static IServiceCollection AddApplication(this IServiceCollection services,
          IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(options =>

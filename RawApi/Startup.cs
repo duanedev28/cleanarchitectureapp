@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using RawApi.Infra.Exceptions;
+using RawApi.Application;
 
 namespace RawApi
 {
@@ -14,8 +15,11 @@ namespace RawApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add Infra services to the container.
             builder.Services.AddInfrastructure(builder.Configuration);
+
+            // Add Application services to the container
+            builder.Services.AddApplication(builder.Configuration);
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddControllers();

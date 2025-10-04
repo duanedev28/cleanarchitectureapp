@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RawApi.Application;
 using RawApi.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
 
 namespace RawApi.Controllers
 {
@@ -12,8 +11,8 @@ namespace RawApi.Controllers
     {
         private readonly IAuthService _authService = authService;
 
-        [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        [HttpPost(nameof(LoginAsync))]
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request)
         {
             var token = await _authService.LoginAsync(request.Email, request.Password);
 
@@ -25,8 +24,8 @@ namespace RawApi.Controllers
             return Ok(new { accessToken = token, expiresIn = 900000 });
         }
 
-        [HttpPost("Signup")]
-        public async Task<IActionResult> Signup([FromBody] User user)
+        [HttpPost(nameof(SignupAsync))]
+        public async Task<IActionResult> SignupAsync([FromBody] User user)
         {
             await _authService.RegisterAsync(user.Name, user.PasswordHash);
             return Ok("User created successfully!");

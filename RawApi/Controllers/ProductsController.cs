@@ -12,15 +12,15 @@ namespace RawApi.Controllers
     {
         private readonly IProductService _productService = productService;
 
-        [HttpPost("CreateProduct")]
-        public async Task<IActionResult> CreateProduct([FromBody] Product product)
+        [HttpPost(nameof(CreateProductAsync))]
+        public async Task<IActionResult> CreateProductAsync([FromBody] Product product)
         {
             var productId = await _productService.CreateProductAsync(product);
             return Ok(new { Id = productId, Message = "Product created successfully" });
         }
 
-        [HttpGet("GetProductById{id}")]
-        public async Task<IActionResult> GetProductById(int id)
+        [HttpGet(nameof(GetProductByIdAsync))]
+        public async Task<IActionResult> GetProductByIdAsync(int id)
         {
             if (id == 0)
             {
@@ -31,8 +31,8 @@ namespace RawApi.Controllers
             return Ok(product);
         }
 
-        [HttpPut("UpdateProduct")]
-        public async Task<IActionResult> UpdateProduct([FromBody] Product product)
+        [HttpPut(nameof(UpdateProductAsync))]
+        public async Task<IActionResult> UpdateProductAsync([FromBody] Product product)
         {
             if (product is null)
             {
