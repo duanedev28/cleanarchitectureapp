@@ -8,5 +8,6 @@ namespace RawApi.Domain
         Task<List<Product>> GetAllProductsAsync();
         Task<Product?> GetProductById(int id);
         Task<bool> UpdateProductAsync(Product product);
+        Task<bool> DeleteProductAsync(int id);
     }
 }

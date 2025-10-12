@@ -35,6 +35,11 @@ namespace RawApi.Infra
             var result = await _context.SaveChangesAsync();
             return result > 0;
         }
+
+        public Task<bool> DeleteProductAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }
