@@ -36,9 +36,16 @@ namespace RawApi.Infra
             return result > 0;
         }
 
-        public Task<bool> DeleteProductAsync(int id)
+        public async Task<bool> DeleteProductAsync(int id)
         {
-            throw new NotImplementedException();
+            var existingProduct = await GetProductById(id);
+            if (existingProduct is null)
+                return false;
+
+            _context.Products.Remove(existingProduct);
+
+            var isDeleted = await _context.SaveChangesAsync() > 0;
+            return isDeleted;
         }
     }
 
